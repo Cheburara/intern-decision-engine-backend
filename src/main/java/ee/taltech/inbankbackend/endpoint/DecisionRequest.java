@@ -3,6 +3,8 @@ package ee.taltech.inbankbackend.endpoint;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.time.LocalDate;
+
 /**
  * Holds the request data of the REST endpoint
  */
@@ -12,4 +14,6 @@ public class DecisionRequest {
     private String personalCode;
     private Long loanAmount;
     private int loanPeriod;
+    private String countryCode;
+    private String dateOfBirth;
 }

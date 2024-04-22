@@ -1,9 +1,6 @@
 package ee.taltech.inbankbackend.endpoint;
 
-import ee.taltech.inbankbackend.exceptions.InvalidLoanAmountException;
-import ee.taltech.inbankbackend.exceptions.InvalidLoanPeriodException;
-import ee.taltech.inbankbackend.exceptions.InvalidPersonalCodeException;
-import ee.taltech.inbankbackend.exceptions.NoValidLoanException;
+import ee.taltech.inbankbackend.exceptions.*;
 import ee.taltech.inbankbackend.service.Decision;
 import ee.taltech.inbankbackend.service.DecisionEngine;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +39,7 @@ public class DecisionEngineController {
      * If no valid loans can be found, the endpoint returns a not found response with an error message.
      * If a valid loan is found, a DecisionResponse is returned containing the approved loan amount and period.
      * </p>
-     *
+     * REFACTOR
      * @param request The request body containing the customer's personal ID code, requested loan amount, and loan period
      * @return A ResponseEntity with a DecisionResponse body containing the approved loan amount and period, and an error message (if any)
      */
@@ -50,13 +47,15 @@ public class DecisionEngineController {
     public ResponseEntity<DecisionResponse> requestDecision(@RequestBody DecisionRequest request) {
         try {
             Decision decision = decisionEngine.
-                    calculateApprovedLoan(request.getPersonalCode(), request.getLoanAmount(), request.getLoanPeriod());
+                    calculateApprovedLoan(request.getPersonalCode(), request.getLoanAmount(), request.getLoanPeriod(),
+                            request.getCountryCode(), request.getDateOfBirth());
             response.setLoanAmount(decision.getLoanAmount());
             response.setLoanPeriod(decision.getLoanPeriod());
             response.setErrorMessage(decision.getErrorMessage());
 
             return ResponseEntity.ok(response);
-        } catch (InvalidPersonalCodeException | InvalidLoanAmountException | InvalidLoanPeriodException e) {
+        } catch (InvalidPersonalCodeException | InvalidLoanAmountException | InvalidLoanPeriodException |
+        AgeRestrictionException e) {
             response.setLoanAmount(null);
             response.setLoanPeriod(null);
             response.setErrorMessage(e.getMessage());

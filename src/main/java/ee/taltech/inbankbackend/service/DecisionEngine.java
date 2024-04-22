@@ -1,14 +1,15 @@
 package ee.taltech.inbankbackend.service;
 
 import ee.taltech.inbankbackend.config.DecisionEngineConstants;
-import ee.taltech.inbankbackend.exceptions.InvalidLoanAmountException;
-import ee.taltech.inbankbackend.exceptions.InvalidLoanPeriodException;
-import ee.taltech.inbankbackend.exceptions.InvalidPersonalCodeException;
-import ee.taltech.inbankbackend.exceptions.NoValidLoanException;
+import ee.taltech.inbankbackend.exceptions.*;
 import ee.taltech.inbankbackend.strategy.CreditModifierStrategy;
+import ee.taltech.inbankbackend.validator.AgeValidator;
+import ee.taltech.inbankbackend.validator.CountryCodeValidator;
 import ee.taltech.inbankbackend.validator.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 
 /**
  * A service class that provides a method for calculating an approved loan amount and period for a customer.
@@ -24,13 +25,22 @@ public class DecisionEngine {
     private final Validator<String> personalCodeValidator;
     private final Validator<Long> loanAmountValidator;
     private final Validator<Integer> loanPeriodValidator;
+    private final AgeValidator ageValidator;
+    private final Validator<String> countryCodeValidator;
 
     @Autowired
-    public DecisionEngine(CreditModifierStrategy creditModifierStrategy,Validator<String> personalCodeValidator,  Validator<Long> loanAmountValidator, Validator<Integer> loanPeriodValidator) {
+    public DecisionEngine(CreditModifierStrategy creditModifierStrategy,
+                          Validator<String> personalCodeValidator,
+                          Validator<Long> loanAmountValidator,
+                          Validator<Integer> loanPeriodValidator,
+                          AgeValidator ageValidator,
+                          Validator<String> countryCodeValidator) {
         this.creditModifierStrategy = creditModifierStrategy;
         this.personalCodeValidator = personalCodeValidator;
         this.loanAmountValidator = loanAmountValidator;
         this.loanPeriodValidator = loanPeriodValidator;
+        this.ageValidator = ageValidator;
+        this.countryCodeValidator = countryCodeValidator;
     }
 
     /**
@@ -38,23 +48,27 @@ public class DecisionEngine {
      * the requested loan amount and the loan period.
      * The loan period must be between 12 and 60 months (inclusive).
      * The loan amount must be between 2000 and 10000€ months (inclusive).
+     * REFACTOR
      *
      * @param personalCode ID code of the customer that made the request.
      * @param loanAmount Requested loan amount
      * @param loanPeriod Requested loan period
+     *                   REFACTOR
      * @return A Decision object containing the approved loan amount and period, and an error message (if any)
      * @throws InvalidPersonalCodeException If the provided personal ID code is invalid
      * @throws InvalidLoanAmountException If the requested loan amount is invalid
      * @throws InvalidLoanPeriodException If the requested loan period is invalid
      * @throws NoValidLoanException If there is no valid loan found for the given ID code, loan amount (debt) and loan period (max)
      */
-    public Decision calculateApprovedLoan(String personalCode, Long loanAmount, int loanPeriod)
+    public Decision calculateApprovedLoan(String personalCode, Long loanAmount, int loanPeriod, String countryCode, String date)
             throws InvalidPersonalCodeException, InvalidLoanAmountException, InvalidLoanPeriodException,
-            NoValidLoanException {
+            NoValidLoanException, AgeRestrictionException {
+        LocalDate dateOfBirth = LocalDate.now();
         try {
-            verifyInputs(personalCode, loanAmount, loanPeriod);
-        } catch (Exception e) {
-            return new Decision(null, null, e.getMessage());
+            dateOfBirth = LocalDate.parse(date);
+            verifyInputs(personalCode, loanAmount, loanPeriod, dateOfBirth, countryCode);
+        } catch (Exception | InvalidCountryCodeException e) {
+            return new Decision(null, null, null, null, e.getMessage());
         }
 
         int outputLoanAmount;
@@ -76,7 +90,7 @@ public class DecisionEngine {
             throw new NoValidLoanException("Loan disapproved: maximum loan period exceeded.");
         }
 
-        return new Decision(outputLoanAmount, loanPeriod, null);
+        return new Decision(outputLoanAmount, loanPeriod, countryCode, dateOfBirth, null);
     }
 
     /**
@@ -99,10 +113,13 @@ public class DecisionEngine {
      * @throws InvalidLoanAmountException If the requested loan amount is out of range
      * @throws InvalidLoanPeriodException If the requested loan period is out of range
      */
-    private void verifyInputs(String personalCode, Long loanAmount, int loanPeriod)
-            throws InvalidPersonalCodeException, InvalidLoanAmountException, InvalidLoanPeriodException {
+    private void verifyInputs(String personalCode, Long loanAmount, int loanPeriod, LocalDate dateOfBirth, String countryCode)
+            throws InvalidPersonalCodeException, InvalidLoanAmountException, InvalidLoanPeriodException,
+            InvalidCountryCodeException, AgeRestrictionException {
         personalCodeValidator.validate(personalCode);
         loanAmountValidator.validate(loanAmount);
         loanPeriodValidator.validate(loanPeriod);
+        countryCodeValidator.validate(countryCode);
+        ageValidator.validate(dateOfBirth, countryCode);
     }
 }
