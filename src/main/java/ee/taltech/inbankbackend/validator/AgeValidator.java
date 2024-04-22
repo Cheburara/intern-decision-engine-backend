@@ -14,7 +14,10 @@ public class AgeValidator {
 
     public void validate(LocalDate dateOfBirth, String countryCode) throws AgeRestrictionException {
         int age = Period.between(dateOfBirth, LocalDate.now()).getYears();
-        int maxAge = COUNTRY_LIFE_EXPECTANCY.getOrDefault(countryCode, 75) - DecisionEngineConstants.MAXIMUM_LOAN_PERIOD / 12;
+        int maxAge = COUNTRY_LIFE_EXPECTANCY.getOrDefault(countryCode.toUpperCase(), 75) - DecisionEngineConstants.MAXIMUM_LOAN_PERIOD / 12;
+        if (dateOfBirth.equals(LocalDate.now())) {
+            throw new AgeRestrictionException("Please, enter the date");
+        }
         if (age < MIN_AGE) {
             throw new AgeRestrictionException("You are too young!"); // REFACTOR
         }

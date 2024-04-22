@@ -10,7 +10,10 @@ public class CountryCodeValidator implements Validator<String> {
 
     @Override
     public void validate(String countryCode) throws InvalidCountryCodeException {
-        if (!COUNTRY_LIFE_EXPECTANCY.containsKey(countryCode)) {
+        if (countryCode.isEmpty()) {
+            throw new InvalidCountryCodeException("Please, enter a country");
+        }
+        if (!COUNTRY_LIFE_EXPECTANCY.containsKey(countryCode.toUpperCase())) {
             throw new InvalidCountryCodeException("Service is currently not available in your country!");
         }
     }
