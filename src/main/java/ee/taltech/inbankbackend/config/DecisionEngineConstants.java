@@ -17,7 +17,7 @@ public class DecisionEngineConstants {
 
     public static final String UNEXPECTED_ERROR_MESSAGE = "An unexpected error occurred";
 
-    public static final int MIN_AGE = 18;
+    public static final int MIN_AGE = 19;
     public static final Map<String, Integer> COUNTRY_LIFE_EXPECTANCY = Map.of(
             "EE", 77,
             "LV", 73,

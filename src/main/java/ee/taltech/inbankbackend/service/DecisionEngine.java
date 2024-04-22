@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 /**
  * A service class that provides a method for calculating an approved loan amount and period for a customer.
@@ -64,7 +65,9 @@ public class DecisionEngine {
             NoValidLoanException, AgeRestrictionException {
         LocalDate dateOfBirth = LocalDate.now();
         try {
-            dateOfBirth = LocalDate.parse(date);
+            if (!date.isEmpty() && !Objects.equals(date, "")) {
+                dateOfBirth = LocalDate.parse(date);
+            }
             verifyInputs(personalCode, loanAmount, loanPeriod, dateOfBirth, countryCode);
         } catch (Exception | InvalidCountryCodeException e) {
             return new Decision(null, null, null, null, e.getMessage());
