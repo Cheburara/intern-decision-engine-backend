@@ -1,9 +1,9 @@
 package ee.taltech.inbankbackend.validator;
 
+import static ee.taltech.inbankbackend.config.DecisionEngineConstants.COUNTRY_LIFE_EXPECTANCY;
+
 import ee.taltech.inbankbackend.exceptions.InvalidCountryCodeException;
 import org.springframework.stereotype.Component;
-
-import static ee.taltech.inbankbackend.config.DecisionEngineConstants.COUNTRY_LIFE_EXPECTANCY;
 
 @Component
 public class CountryCodeValidator implements Validator<String> {

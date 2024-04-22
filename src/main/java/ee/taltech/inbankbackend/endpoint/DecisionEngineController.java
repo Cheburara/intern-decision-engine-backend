@@ -1,5 +1,7 @@
 package ee.taltech.inbankbackend.endpoint;
 
+import static ee.taltech.inbankbackend.config.DecisionEngineConstants.UNEXPECTED_ERROR_MESSAGE;
+
 import ee.taltech.inbankbackend.exceptions.*;
 import ee.taltech.inbankbackend.service.Decision;
 import ee.taltech.inbankbackend.service.DecisionEngine;
@@ -11,8 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import static ee.taltech.inbankbackend.config.DecisionEngineConstants.UNEXPECTED_ERROR_MESSAGE;
 
 @RestController
 @RequestMapping("/loan")
