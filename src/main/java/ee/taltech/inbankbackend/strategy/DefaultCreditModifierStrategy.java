@@ -1,8 +1,11 @@
 package ee.taltech.inbankbackend.strategy;
 
 import ee.taltech.inbankbackend.config.DecisionEngineConstants;
+import org.springframework.stereotype.Component;
 
+@Component
 public class DefaultCreditModifierStrategy implements CreditModifierStrategy {
+
     @Override
     public int getCreditModifier(String personalCode) {
         int segment = Integer.parseInt(personalCode.substring(personalCode.length() - 4));

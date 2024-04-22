@@ -2,7 +2,9 @@ package ee.taltech.inbankbackend.validator;
 
 import ee.taltech.inbankbackend.config.DecisionEngineConstants;
 import ee.taltech.inbankbackend.exceptions.InvalidLoanPeriodException;
+import org.springframework.stereotype.Component;
 
+@Component
 public class LoanPeriodValidator implements Validator<Integer> {
 
     @Override

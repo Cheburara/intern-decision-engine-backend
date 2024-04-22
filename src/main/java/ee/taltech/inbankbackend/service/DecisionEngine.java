@@ -7,6 +7,7 @@ import ee.taltech.inbankbackend.exceptions.InvalidPersonalCodeException;
 import ee.taltech.inbankbackend.exceptions.NoValidLoanException;
 import ee.taltech.inbankbackend.strategy.CreditModifierStrategy;
 import ee.taltech.inbankbackend.validator.Validator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -24,6 +25,7 @@ public class DecisionEngine {
     private final Validator<Long> loanAmountValidator;
     private final Validator<Integer> loanPeriodValidator;
 
+    @Autowired
     public DecisionEngine(CreditModifierStrategy creditModifierStrategy,Validator<String> personalCodeValidator,  Validator<Long> loanAmountValidator, Validator<Integer> loanPeriodValidator) {
         this.creditModifierStrategy = creditModifierStrategy;
         this.personalCodeValidator = personalCodeValidator;
