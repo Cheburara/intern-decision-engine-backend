@@ -1,7 +1,7 @@
 package ee.taltech.inbankbackend.exceptions;
 
 /**
- * Thrown when requested loan amount is invalid.
+ * Thrown when requested country code is invalid.
  */
 public class InvalidCountryCodeException extends Throwable {
     private final String message;

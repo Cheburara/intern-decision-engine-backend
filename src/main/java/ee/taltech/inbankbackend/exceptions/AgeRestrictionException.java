@@ -1,7 +1,7 @@
 package ee.taltech.inbankbackend.exceptions;
 
 /**
- * Thrown when person is under REFACTOR.
+ * Thrown when person's age does not meet requirements.
  */
 public class AgeRestrictionException extends Throwable {
     private final String message;

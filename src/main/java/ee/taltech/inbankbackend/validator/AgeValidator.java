@@ -19,10 +19,10 @@ public class AgeValidator {
             throw new AgeRestrictionException("Please, enter the date");
         }
         if (age < MIN_AGE) {
-            throw new AgeRestrictionException("You are too young!"); // REFACTOR
+            throw new AgeRestrictionException("You must be at least " + MIN_AGE + " years old to apply for a loan!"); // REFACTOR
         }
         if (age > maxAge) {
-            throw new AgeRestrictionException((age + " OLDDDD " + maxAge )); // REFACTOR
+            throw new AgeRestrictionException(("You must be younger than " + maxAge + " years old to apply for a loan, but you are " + age + " years old.")); // REFACTOR
         }
     }
 }
