@@ -1,6 +1,5 @@
 package ee.taltech.inbankbackend.service;
 
-import com.github.vladislavgoltjajev.personalcode.locale.estonia.EstonianPersonalCodeValidator;
 import ee.taltech.inbankbackend.config.DecisionEngineConstants;
 import ee.taltech.inbankbackend.exceptions.InvalidLoanAmountException;
 import ee.taltech.inbankbackend.exceptions.InvalidLoanPeriodException;
@@ -20,10 +19,10 @@ public class DecisionEngine {
 
     private int creditModifier = 0;
 
-    private CreditModifierStrategy creditModifierStrategy;
-    private Validator<String> personalCodeValidator;
-    private Validator<Long> loanAmountValidator;
-    private Validator<Integer> loanPeriodValidator;
+    private final CreditModifierStrategy creditModifierStrategy;
+    private final Validator<String> personalCodeValidator;
+    private final Validator<Long> loanAmountValidator;
+    private final Validator<Integer> loanPeriodValidator;
 
     public DecisionEngine(CreditModifierStrategy creditModifierStrategy,Validator<String> personalCodeValidator,  Validator<Long> loanAmountValidator, Validator<Integer> loanPeriodValidator) {
         this.creditModifierStrategy = creditModifierStrategy;
