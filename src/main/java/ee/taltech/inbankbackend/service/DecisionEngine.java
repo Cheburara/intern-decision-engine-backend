@@ -18,8 +18,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class DecisionEngine {
 
-    // Used to check for the validity of the presented ID code.
-    private final EstonianPersonalCodeValidator validator = new EstonianPersonalCodeValidator();
     private int creditModifier = 0;
 
     private CreditModifierStrategy creditModifierStrategy;
