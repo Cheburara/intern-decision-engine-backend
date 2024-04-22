@@ -179,7 +179,7 @@ class DecisionEngineTest {
         InvalidCountryCodeException exception = assertThrows(InvalidCountryCodeException.class,
                 () -> validator.validate(unsupportedCountryCode));
     }
-    
+
     @Test
     void testSupportedCountryCodes_DoesNotThrowException() {
         String[] validCountryCodes = {"LV", "LT"};
@@ -189,7 +189,6 @@ class DecisionEngineTest {
             assertDoesNotThrow(() -> validator.validate(validCountryCode));
         }
     }
-
 
 }
 

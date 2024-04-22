@@ -53,11 +53,13 @@ public class DecisionEngine {
      * @param personalCode ID code of the customer that made the request.
      * @param loanAmount Requested loan amount
      * @param loanPeriod Requested loan period
-     *                   REFACTOR
-     * @return A Decision object containing the approved loan amount and period, and an error message (if any)
+     * @param countryCode Requested country code
+     * @param date Requested date of birth
+     * @return A Decision object containing the approved loan amount and period, country code and date of birth, and an error message (if any)
      * @throws InvalidPersonalCodeException If the provided personal ID code is invalid
      * @throws InvalidLoanAmountException If the requested loan amount is invalid
      * @throws InvalidLoanPeriodException If the requested loan period is invalid
+     * @throws AgeRestrictionException If the declared age does not meet requirements
      * @throws NoValidLoanException If there is no valid loan found for the given ID code, loan amount (debt) and loan period (max)
      */
     public Decision calculateApprovedLoan(String personalCode, Long loanAmount, int loanPeriod, String countryCode, String date)
@@ -107,13 +109,6 @@ public class DecisionEngine {
     /**
      * Verify that all inputs are valid according to business rules.
      * If inputs are invalid, then throws corresponding exceptions.
-     *
-     * @param personalCode Provided personal ID code
-     * @param loanAmount Requested loan amount
-     * @param loanPeriod Requested loan period
-     * @throws InvalidPersonalCodeException If the provided personal ID code is invalid
-     * @throws InvalidLoanAmountException If the requested loan amount is out of range
-     * @throws InvalidLoanPeriodException If the requested loan period is out of range
      */
     private void verifyInputs(String personalCode, Long loanAmount, int loanPeriod, LocalDate dateOfBirth, String countryCode)
             throws InvalidPersonalCodeException, InvalidLoanAmountException, InvalidLoanPeriodException,
