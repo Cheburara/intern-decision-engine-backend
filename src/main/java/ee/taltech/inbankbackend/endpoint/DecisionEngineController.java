@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static ee.taltech.inbankbackend.config.DecisionEngineConstants.UNEXPECTED_ERROR_MESSAGE;
+
 @RestController
 @RequestMapping("/loan")
 @CrossOrigin
@@ -31,13 +33,15 @@ public class DecisionEngineController {
 
     /**
      * A REST endpoint that handles requests for loan decisions.
+     * <p>
      * The endpoint accepts POST requests with a request body containing the customer's personal ID code,
-     * requested loan amount, and loan period.<br><br>
-     * - If the loan amount or period is invalid, the endpoint returns a bad request response with an error message.<br>
-     * - If the personal ID code is invalid, the endpoint returns a bad request response with an error message.<br>
-     * - If an unexpected error occurs, the endpoint returns an internal server error response with an error message.<br>
-     * - If no valid loans can be found, the endpoint returns a not found response with an error message.<br>
-     * - If a valid loan is found, a DecisionResponse is returned containing the approved loan amount and period.
+     * requested loan amount, and loan period.
+     * If the loan amount or period is invalid, the endpoint returns a bad request response with an error message.
+     * If the personal ID code is invalid, the endpoint returns a bad request response with an error message.
+     * If an unexpected error occurs, the endpoint returns an internal server error response with an error message.
+     * If no valid loans can be found, the endpoint returns a not found response with an error message.
+     * If a valid loan is found, a DecisionResponse is returned containing the approved loan amount and period.
+     * </p>
      *
      * @param request The request body containing the customer's personal ID code, requested loan amount, and loan period
      * @return A ResponseEntity with a DecisionResponse body containing the approved loan amount and period, and an error message (if any)
@@ -67,7 +71,7 @@ public class DecisionEngineController {
         } catch (Exception e) {
             response.setLoanAmount(null);
             response.setLoanPeriod(null);
-            response.setErrorMessage("An unexpected error occurred");
+            response.setErrorMessage(UNEXPECTED_ERROR_MESSAGE);
 
             return ResponseEntity.internalServerError().body(response);
         }

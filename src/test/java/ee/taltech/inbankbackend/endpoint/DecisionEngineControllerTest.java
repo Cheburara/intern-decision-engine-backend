@@ -20,6 +20,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import static ee.taltech.inbankbackend.config.DecisionEngineConstants.UNEXPECTED_ERROR_MESSAGE;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -212,12 +213,12 @@ public class DecisionEngineControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.loanAmount").isEmpty())
                 .andExpect(jsonPath("$.loanPeriod").isEmpty())
-                .andExpect(jsonPath("$.errorMessage").value("An unexpected error occurred"))
+                .andExpect(jsonPath("$.errorMessage").value(UNEXPECTED_ERROR_MESSAGE))
                 .andReturn();
 
         DecisionResponse response = objectMapper.readValue(result.getResponse().getContentAsString(), DecisionResponse.class);
         assert response.getLoanAmount() == null;
         assert response.getLoanPeriod() == null;
-        assert response.getErrorMessage().equals("An unexpected error occurred");
+        assert response.getErrorMessage().equals(UNEXPECTED_ERROR_MESSAGE);
     }
 }
