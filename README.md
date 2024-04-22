@@ -21,8 +21,9 @@ To install and run the service, please follow these steps:
 
 1. Clone the repository.
 2. Navigate to the root directory of the project.
-3. Run `gradle build` to build the application.
-4. Run `java -jar build/libs/inbank-backend-1.0.jar` to start the application
+3. Add execution permission for the 'gradlew' file.
+4. Run `gradlew build` to build the application.
+5. Run `java -jar build/libs/inbank-backend-1.0.jar` to start the application
 
 The default port is 8080.
 
