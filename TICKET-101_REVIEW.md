@@ -21,20 +21,22 @@ This document is a summary of implementation of TICKET-101.
   - Refactor tests to avoid duplicating test scenarios (e.g., `testDebtorPersonalCode` and `testNoValidLoanFound` may overlap).
   - Ensure consistent usage of constants in tests to improve maintainability and readability.
 
-- **Coding:**
-  **DesicisonEngineController**
+- **Coding:** <br />
+  **DesicisonEngineController**<br />
   - Well-defined REST API for managing loan decision requests.
-  - Deviation towards Javadoc standards.
-  **Exceptions**
-  - Well done on considering possible scenarios.
-  **DesicionEngine**
+  - Deviation towards Javadoc standards. (FIXED) <br />
+  
+  **Exceptions**<br />
+  - Well done on considering possible scenarios.<br />
+
+  **DesicionEngine**<br />
   - Primitive scoring algorithm is implemented.
   - Error handling is implemented.
   - Adherence to Javadoc standards (However, it may be worth considering why private methods were also documented).
-  - Unnecessary complex logic in some places (if (!(... <= ...)) to if (... > ...)) or namings (e.g., `highestValidLoanAmount` -> `maxLoanAmount`).
-  - Consider provisions for system expansion (e.g., modifier calculation logic).
+  - Unnecessary complex logic in some places (if (!(... <= ...)) to if (... > ...)) or namings (e.g., `highestValidLoanAmount` -> `maxLoanAmount`). (FIXED)
+  - Consider provisions for system expansion (e.g., modifier calculation logic). (FIXED)
   - Refactor error messages to be more self-explanatory (e.g. `No valid loan found!` -> `Loan disapproved: existing debt`/
-    `Loan disapproved: maximum loan period exceeded`)
+  `Loan disapproved: maximum loan period exceeded`) (FIXED)
 
 ### Analysis of Logic in Terms of SOLID Principles
 1. **SRP (Single Responsibility Principle)**
@@ -53,7 +55,7 @@ This document is a summary of implementation of TICKET-101.
    While *DecisionEngineController* depends on the abstracted *DecisionEngine* service, direct instantiation of *EstonianPersonalCodeValidator* within the *DecisionEngine* class suggests a need for dependency injection.
 
 ## Main shortcoming
-Despite the backend meeting all requirements, the final solution is not functioning as expected due to issues in the frontend.
+Despite the backend meeting all requirements, the final solution was not functioning as expected due to issues in the frontend.
 
 
 ## Frontend
