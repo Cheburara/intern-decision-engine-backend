@@ -1,8 +1,5 @@
 package ee.taltech.inbankbackend.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import ee.taltech.inbankbackend.config.DecisionEngineConstants;
 import ee.taltech.inbankbackend.exceptions.*;
 import ee.taltech.inbankbackend.strategy.CreditModifierStrategy;
@@ -15,6 +12,8 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class DecisionEngineTest {
@@ -154,6 +153,43 @@ class DecisionEngineTest {
                 () -> decisionEngine.calculateApprovedLoan(debtorPersonalCode, 10000L, 60,
                         ESTONIAN_COUNTRY_CODE, ELIGIBLE_DATE_OF_BIRTH));
     }
+
+    @Test
+    void testYoungIneligibleDateOfBirth_ThrowsAgeRestrictionException() {
+
+        String YOUNG_INELIGIBLE_DATE_OF_BIRTH = LocalDate.now().minusYears(17).toString();
+        assertThrows(AgeRestrictionException.class,
+                () -> decisionEngine.calculateApprovedLoan(segment1PersonalCode, 4000L, 12,
+                        ESTONIAN_COUNTRY_CODE.toUpperCase(), YOUNG_INELIGIBLE_DATE_OF_BIRTH));
+    }
+
+    @Test
+    void testOldIneligibleDateOfBirth_ThrowsAgeRestrictionException() {
+        String OLD_INELIGIBLE_DATE_OF_BIRTH = LocalDate.now().minusYears(80).toString();
+        assertThrows(AgeRestrictionException.class,
+                () -> decisionEngine.calculateApprovedLoan(segment2PersonalCode, 4000L, 12,
+                        ESTONIAN_COUNTRY_CODE.toUpperCase(), OLD_INELIGIBLE_DATE_OF_BIRTH));
+    }
+
+    @Test
+    void testUnsupportedCountryCode_ThrowsInvalidCountryCodeException() {
+        String unsupportedCountryCode = "AA";
+        CountryCodeValidator validator = new CountryCodeValidator();
+
+        InvalidCountryCodeException exception = assertThrows(InvalidCountryCodeException.class,
+                () -> validator.validate(unsupportedCountryCode));
+    }
+    
+    @Test
+    void testSupportedCountryCodes_DoesNotThrowException() {
+        String[] validCountryCodes = {"LV", "LT"};
+        CountryCodeValidator validator = new CountryCodeValidator();
+
+        for (String validCountryCode : validCountryCodes) {
+            assertDoesNotThrow(() -> validator.validate(validCountryCode));
+        }
+    }
+
 
 }
 
